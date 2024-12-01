@@ -3,7 +3,11 @@ package day1
 import (
 	"aoc2024/cmd"
 	"fmt"
+	"math"
 	"os"
+	"sort"
+	"strconv"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -30,6 +34,48 @@ func Run1() {
 }
 
 func Solve(data string) (int, int) {
+	lines := strings.Split(data, "\n")
 
-	return 0, 0
+	var left []int
+	var right []int
+	for _, line := range lines {
+		parts := strings.Split(line, "   ")
+		lv, _ := strconv.Atoi(parts[0])
+		rv, _ := strconv.Atoi(parts[1])
+		left = append(left, lv)
+		right = append(right, rv)
+	}
+
+	sort.Slice(left, func(i, j int) bool {
+		return left[i] < left[j]
+	})
+
+	sort.Slice(right, func(i, j int) bool {
+		return right[i] < right[j]
+	})
+
+	ans1 := 0
+	ans2 := 0
+	countCache := make(map[int]int)
+	for i, lv := range left {
+		delta := lv - right[i]
+		ans1 += int(math.Abs(float64(delta)))
+
+		val, ok := countCache[lv]
+		if ok {
+			ans2 += lv * val
+		} else {
+			count := 0
+			for _, rv := range right {
+				if lv == rv {
+					count++
+				}
+			}
+
+			countCache[lv] = count
+			ans2 += lv * count
+		}
+	}
+
+	return ans1, ans2
 }
