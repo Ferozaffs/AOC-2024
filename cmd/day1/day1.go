@@ -39,20 +39,15 @@ func Solve(data string) (int, int) {
 	var left []int
 	var right []int
 	for _, line := range lines {
-		parts := strings.Split(line, "   ")
+		parts := strings.Fields(line)
 		lv, _ := strconv.Atoi(parts[0])
 		rv, _ := strconv.Atoi(parts[1])
 		left = append(left, lv)
 		right = append(right, rv)
 	}
 
-	sort.Slice(left, func(i, j int) bool {
-		return left[i] < left[j]
-	})
-
-	sort.Slice(right, func(i, j int) bool {
-		return right[i] < right[j]
-	})
+	sort.Ints(left)
+	sort.Ints(right)
 
 	ans1 := 0
 	ans2 := 0
