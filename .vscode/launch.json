@@ -10,7 +10,7 @@
             "request": "launch",
             "mode": "debug",
             "program": "${fileDirname}",
-            "args": ["day1"]
+            "args": ["day2"]
         }
     ]
 }
