@@ -4,7 +4,10 @@ import (
 	"aoc2024/cmd"
 	"fmt"
 	"os"
+	"regexp"
+	"strconv"
 
+	"github.com/dlclark/regexp2"
 	"github.com/spf13/cobra"
 )
 
@@ -30,6 +33,33 @@ func Run1() {
 }
 
 func Solve(data string) (int, int) {
+	extractMul := `mul\(\d{1,3},\d{1,3}\)`
+	//extractMulAdv := `(^|(?=do\(\))).*?((?=don't\(\))|$)`
+	extractMulAdv := `((^|do\(\))(?:[^d]|d(?!on't\())*?(?=(don't\(\)|$)))`
+	extractDigits := `\d{1,3}`
+	reMul := regexp.MustCompile(extractMul)
+	reMulAdv := regexp2.MustCompile(extractMulAdv, regexp2.None)
+	reDigit := regexp.MustCompile(extractDigits)
 
-	return 0, 0
+	ans1 := 0
+	ans2 := 0
+	matches := reMul.FindAllString(data, -1)
+	for _, m := range matches {
+		digits := reDigit.FindAllString(m, -1)
+		a, _ := strconv.Atoi(digits[0])
+		b, _ := strconv.Atoi(digits[1])
+		ans1 += a * b
+	}
+
+	for am, _ := reMulAdv.FindStringMatch(data); am != nil; am, _ = reMulAdv.FindNextMatch(am) {
+		matches = reMul.FindAllString(am.String(), -1)
+		for _, m := range matches {
+			digits := reDigit.FindAllString(m, -1)
+			a, _ := strconv.Atoi(digits[0])
+			b, _ := strconv.Atoi(digits[1])
+			ans2 += a * b
+		}
+	}
+
+	return ans1, ans2
 }
