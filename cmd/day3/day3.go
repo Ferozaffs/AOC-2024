@@ -34,7 +34,6 @@ func Run1() {
 
 func Solve(data string) (int, int) {
 	extractMul := `mul\(\d{1,3},\d{1,3}\)`
-	//extractMulAdv := `(^|(?=do\(\))).*?((?=don't\(\))|$)`
 	extractMulAdv := `((^|do\(\))(?:[^d]|d(?!on't\())*?(?=(don't\(\)|$)))`
 	extractDigits := `\d{1,3}`
 	reMul := regexp.MustCompile(extractMul)
