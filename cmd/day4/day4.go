@@ -2,19 +2,14 @@ package day4
 
 import (
 	"aoc2024/cmd"
+	"aoc2024/helpers"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/spf13/cobra"
 )
 
-type Coord struct {
-	x int
-	y int
-}
-
-var directions = []Coord{
+var directions = []helpers.Coord{
 	{1, 1},
 	{1, 0},
 	{1, -1},
@@ -25,11 +20,11 @@ var directions = []Coord{
 	{-1, -1},
 }
 
-var diagonal1 = []Coord{
+var diagonal1 = []helpers.Coord{
 	{1, 1},
 	{-1, -1},
 }
-var diagonal2 = []Coord{
+var diagonal2 = []helpers.Coord{
 	{1, -1},
 	{-1, 1},
 }
@@ -59,16 +54,8 @@ func Solve(data string) (int, int) {
 	ans1 := 0
 	ans2 := 0
 
-	var grid [][]rune
-
-	lines := strings.Split(data, "\n")
-	for _, line := range lines {
-		var runes []rune
-		for _, r := range line {
-			runes = append(runes, r)
-		}
-		grid = append(grid, runes)
-	}
+	var grid helpers.Grid
+	grid.Init(data)
 
 	for x := range grid {
 		for y := range grid[x] {
@@ -83,16 +70,16 @@ func Solve(data string) (int, int) {
 	return ans1, ans2
 }
 
-func StartXMASSearch(grid *[][]rune, x int, y int) int {
+func StartXMASSearch(grid *helpers.Grid, x int, y int) int {
 	results := 0
 	searchSlice := []rune{'M', 'A', 'S'}
 	for _, d := range directions {
-		results += Search(grid, x, y, d.x, d.y, searchSlice)
+		results += Search(grid, x, y, d.X, d.Y, searchSlice)
 	}
 
 	return results
 }
-func Search(grid *[][]rune, x int, y int, dx int, dy int, searchSlice []rune) int {
+func Search(grid *helpers.Grid, x int, y int, dx int, dy int, searchSlice []rune) int {
 	if len(searchSlice) == 0 {
 		return 1
 	}
@@ -102,31 +89,22 @@ func Search(grid *[][]rune, x int, y int, dx int, dy int, searchSlice []rune) in
 	x += dx
 	y += dy
 
-	if x < 0 || y < 0 || x == len(*grid) || y == len((*grid)[0]) {
-		return 0
-	}
-
-	if (*grid)[x][y] == pop {
+	r, _ := grid.GetPoint(x, y)
+	if r == pop {
 		return Search(grid, x, y, dx, dy, searchSlice)
 	}
 
 	return 0
 }
 
-func StartX_MASSearch(grid *[][]rune, x int, y int) int {
+func StartX_MASSearch(grid *helpers.Grid, x int, y int) int {
 	diag1_M := false
 	diag1_S := false
 	diag2_M := false
 	diag2_S := false
 	for _, d := range diagonal1 {
-		dx := x + d.x
-		dy := y + d.y
+		r, _ := grid.GetPointCoord(x, y, d)
 
-		if dx < 0 || dy < 0 || dx == len(*grid) || dy == len((*grid)[0]) {
-			continue
-		}
-
-		r := (*grid)[dx][dy]
 		if r == 'M' {
 			diag1_M = true
 		} else if r == 'S' {
@@ -135,14 +113,8 @@ func StartX_MASSearch(grid *[][]rune, x int, y int) int {
 	}
 
 	for _, d := range diagonal2 {
-		dx := x + d.x
-		dy := y + d.y
+		r, _ := grid.GetPointCoord(x, y, d)
 
-		if dx < 0 || dy < 0 || dx == len(*grid) || dy == len((*grid)[0]) {
-			continue
-		}
-
-		r := (*grid)[dx][dy]
 		if r == 'M' {
 			diag2_M = true
 		} else if r == 'S' {

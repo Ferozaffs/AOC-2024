@@ -28,6 +28,7 @@ import (
 	_ "aoc2024/cmd/day8"
 	_ "aoc2024/cmd/day9"
 	_ "aoc2024/cmd/dayX"
+	_ "aoc2024/helpers"
 )
 
 func main() {
