@@ -7,6 +7,38 @@ type Coord struct {
 	Y int
 }
 
+func (c *Coord) RotateCW() {
+	if c.X == 1 {
+		c.X = 0
+		c.Y = -1
+	} else if c.Y == -1 {
+		c.X = -1
+		c.Y = 0
+	} else if c.X == -1 {
+		c.X = 0
+		c.Y = 1
+	} else if c.Y == 1 {
+		c.X = 1
+		c.Y = 0
+	}
+}
+
+func (c *Coord) RotateCCW() {
+	if c.X == 1 {
+		c.X = 0
+		c.Y = 1
+	} else if c.Y == 1 {
+		c.X = -1
+		c.Y = 0
+	} else if c.X == -1 {
+		c.X = 0
+		c.Y = -1
+	} else if c.Y == -1 {
+		c.X = 1
+		c.Y = 0
+	}
+}
+
 type Grid [][]rune
 
 func (g *Grid) Init(input string) bool {
@@ -43,4 +75,13 @@ func (g Grid) GetPoint(x int, y int) (rune, bool) {
 	}
 
 	return g[x][y], true
+}
+
+func (g Grid) DeepCopy() Grid {
+	newGrid := make(Grid, len(g))
+	for i := range g {
+		newGrid[i] = make([]rune, len(g[i]))
+		copy(newGrid[i], g[i])
+	}
+	return newGrid
 }
