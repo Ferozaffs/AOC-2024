@@ -2,40 +2,40 @@ package helpers
 
 import "strings"
 
-type Coord struct {
+type Point struct {
 	X int
 	Y int
 }
 
-func (c *Coord) RotateCW() {
-	if c.X == 1 {
-		c.X = 0
-		c.Y = -1
-	} else if c.Y == -1 {
-		c.X = -1
-		c.Y = 0
-	} else if c.X == -1 {
-		c.X = 0
-		c.Y = 1
-	} else if c.Y == 1 {
-		c.X = 1
-		c.Y = 0
+func (p *Point) RotateCW() {
+	if p.X == 1 {
+		p.X = 0
+		p.Y = -1
+	} else if p.Y == -1 {
+		p.X = -1
+		p.Y = 0
+	} else if p.X == -1 {
+		p.X = 0
+		p.Y = 1
+	} else if p.Y == 1 {
+		p.X = 1
+		p.Y = 0
 	}
 }
 
-func (c *Coord) RotateCCW() {
-	if c.X == 1 {
-		c.X = 0
-		c.Y = 1
-	} else if c.Y == 1 {
-		c.X = -1
-		c.Y = 0
-	} else if c.X == -1 {
-		c.X = 0
-		c.Y = -1
-	} else if c.Y == -1 {
-		c.X = 1
-		c.Y = 0
+func (p *Point) RotateCCW() {
+	if p.X == 1 {
+		p.X = 0
+		p.Y = 1
+	} else if p.Y == 1 {
+		p.X = -1
+		p.Y = 0
+	} else if p.X == -1 {
+		p.X = 0
+		p.Y = -1
+	} else if p.Y == -1 {
+		p.X = 1
+		p.Y = 0
 	}
 }
 
@@ -60,17 +60,21 @@ func (g *Grid) Init(input string) bool {
 }
 
 func (g Grid) GetPointDir(x int, y int, dx int, dy int) (rune, bool) {
-	return g.GetPointCoord(x, y, Coord{dx, dy})
+	return g.GetPointOffset(x, y, Point{dx, dy})
 }
 
-func (g Grid) GetPointCoord(x int, y int, c Coord) (rune, bool) {
-	x += c.X
-	y += c.Y
-	return g.GetPoint(x, y)
+func (g Grid) GetPointOffset(x int, y int, p Point) (rune, bool) {
+	x += p.X
+	y += p.Y
+	return g.GetPointXY(x, y)
 }
 
-func (g Grid) GetPoint(x int, y int) (rune, bool) {
-	if x < 0 || y < 0 || x == len(g) || y == len(g[0]) {
+func (g Grid) GetPoint(p Point) (rune, bool) {
+	return g.GetPointXY(p.X, p.Y)
+}
+
+func (g Grid) GetPointXY(x int, y int) (rune, bool) {
+	if x < 0 || y < 0 || x >= len(g) || y >= len(g[0]) {
 		return ' ', false
 	}
 

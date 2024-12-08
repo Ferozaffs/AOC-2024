@@ -10,8 +10,8 @@ import (
 )
 
 type Visit struct {
-	d helpers.Coord
-	p helpers.Coord
+	d helpers.Point
+	p helpers.Point
 }
 
 var day1_1Cmd = &cobra.Command{
@@ -40,7 +40,7 @@ func Solve(data string) (int, int) {
 	var grid helpers.Grid
 	grid.Init(data)
 
-	var start helpers.Coord
+	var start helpers.Point
 	for x := range grid {
 		for y := range grid[x] {
 			if grid[x][y] == '^' {
@@ -50,14 +50,14 @@ func Solve(data string) (int, int) {
 		}
 	}
 
-	direction := helpers.Coord{X: -1, Y: 0}
+	direction := helpers.Point{X: -1, Y: 0}
 	vists := []Visit{}
 	ans1, uv, _ := Walk(start, direction, vists, &grid, false)
 
 	ans2 := 0
 	for _, v := range uv {
 		if grid[v.X][v.Y] == '.' {
-			d := helpers.Coord{X: -1, Y: 0}
+			d := helpers.Point{X: -1, Y: 0}
 			nv := []Visit{}
 			grid[v.X][v.Y] = '#'
 			_, _, loop := Walk(start, d, nv, &grid, true)
@@ -70,12 +70,12 @@ func Solve(data string) (int, int) {
 	return ans1, ans2
 }
 
-func Walk(position helpers.Coord, direction helpers.Coord, visits []Visit, grid *helpers.Grid, checkLoop bool) (int, []helpers.Coord, bool) {
+func Walk(position helpers.Point, direction helpers.Point, visits []Visit, grid *helpers.Grid, checkLoop bool) (int, []helpers.Point, bool) {
 	currentVisit := Visit{d: direction, p: position}
 	for _, v := range visits {
 		if v == currentVisit {
 			if checkLoop {
-				return -1, []helpers.Coord{}, true
+				return -1, []helpers.Point{}, true
 			}
 			l, uv := CalculateUniquePoints(visits)
 			return l, uv, true
@@ -86,11 +86,11 @@ func Walk(position helpers.Coord, direction helpers.Coord, visits []Visit, grid 
 
 	nextVisit := currentVisit
 
-	r, e := grid.GetPointCoord(nextVisit.p.X, nextVisit.p.Y, direction)
+	r, e := grid.GetPointOffset(nextVisit.p.X, nextVisit.p.Y, direction)
 	for i := 0; i < 4; i++ {
 		if !e {
 			if checkLoop {
-				return -1, []helpers.Coord{}, false
+				return -1, []helpers.Point{}, false
 			}
 			l, uv := CalculateUniquePoints(visits)
 			return l, uv, false
@@ -102,7 +102,7 @@ func Walk(position helpers.Coord, direction helpers.Coord, visits []Visit, grid 
 			break
 		}
 
-		r, e = grid.GetPointCoord(nextVisit.p.X, nextVisit.p.Y, direction)
+		r, e = grid.GetPointOffset(nextVisit.p.X, nextVisit.p.Y, direction)
 	}
 
 	nextVisit.p.X += direction.X
@@ -111,8 +111,8 @@ func Walk(position helpers.Coord, direction helpers.Coord, visits []Visit, grid 
 	return Walk(nextVisit.p, direction, visits, grid, checkLoop)
 }
 
-func CalculateUniquePoints(visits []Visit) (int, []helpers.Coord) {
-	uniqueVisits := []helpers.Coord{}
+func CalculateUniquePoints(visits []Visit) (int, []helpers.Point) {
+	uniqueVisits := []helpers.Point{}
 	for _, v := range visits {
 		isUnique := true
 		for _, u := range uniqueVisits {

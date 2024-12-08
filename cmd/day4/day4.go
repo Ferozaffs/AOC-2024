@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var directions = []helpers.Coord{
+var directions = []helpers.Point{
 	{1, 1},
 	{1, 0},
 	{1, -1},
@@ -20,11 +20,11 @@ var directions = []helpers.Coord{
 	{-1, -1},
 }
 
-var diagonal1 = []helpers.Coord{
+var diagonal1 = []helpers.Point{
 	{1, 1},
 	{-1, -1},
 }
-var diagonal2 = []helpers.Coord{
+var diagonal2 = []helpers.Point{
 	{1, -1},
 	{-1, 1},
 }
@@ -89,7 +89,7 @@ func Search(grid *helpers.Grid, x int, y int, dx int, dy int, searchSlice []rune
 	x += dx
 	y += dy
 
-	r, _ := grid.GetPoint(x, y)
+	r, _ := grid.GetPointXY(x, y)
 	if r == pop {
 		return Search(grid, x, y, dx, dy, searchSlice)
 	}
@@ -103,7 +103,7 @@ func StartX_MASSearch(grid *helpers.Grid, x int, y int) int {
 	diag2_M := false
 	diag2_S := false
 	for _, d := range diagonal1 {
-		r, _ := grid.GetPointCoord(x, y, d)
+		r, _ := grid.GetPointOffset(x, y, d)
 
 		if r == 'M' {
 			diag1_M = true
@@ -113,7 +113,7 @@ func StartX_MASSearch(grid *helpers.Grid, x int, y int) int {
 	}
 
 	for _, d := range diagonal2 {
-		r, _ := grid.GetPointCoord(x, y, d)
+		r, _ := grid.GetPointOffset(x, y, d)
 
 		if r == 'M' {
 			diag2_M = true
