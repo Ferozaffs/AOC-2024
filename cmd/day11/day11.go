@@ -4,6 +4,8 @@ import (
 	"aoc2024/cmd"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -30,6 +32,48 @@ func Run1() {
 }
 
 func Solve(data string) (int, int) {
+	stones := strings.Fields(data)
+	mappedStones := make(map[int]int)
+	for _, s := range stones {
+		v, _ := strconv.Atoi(s)
+		mappedStones[v]++
+	}
 
-	return 0, 0
+	ans1 := 0
+	ans2 := 0
+	for i := 0; i < 75; i++ {
+		updatedStones := make(map[int]int)
+		for v, c := range mappedStones {
+			if v == 0 {
+				updatedStones[1] += c
+				continue
+			}
+
+			s := strconv.Itoa(v)
+			if len(s)%2 == 0 {
+				mid := len(s) / 2
+				v1, _ := strconv.Atoi(s[:mid])
+				v2, _ := strconv.Atoi(s[mid:])
+				updatedStones[v1] += c
+				updatedStones[v2] += c
+				continue
+			}
+
+			updatedStones[v*2024] += c
+		}
+
+		mappedStones = updatedStones
+
+		if i == 24 {
+			for _, c := range mappedStones {
+				ans1 += c
+			}
+		}
+	}
+
+	for _, c := range mappedStones {
+		ans2 += c
+	}
+
+	return ans1, ans2
 }

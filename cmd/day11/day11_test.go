@@ -4,10 +4,14 @@ import (
 	"testing"
 )
 
-func TestSample1(t *testing.T) {
+func TestSample(t *testing.T) {
+	sampleData := `125 17`
 
-}
-
-func TestSample2(t *testing.T) {
-
+	ans1, _ := Solve(sampleData)
+	if ans1 != 55312 {
+		t.Fatalf("Mismatch! Expected 55312 got %d", ans1)
+	}
+	//if ans2 != 81 {
+	//	t.Fatalf("Mismatch! Expected 81 got %d", ans2)
+	//}
 }
