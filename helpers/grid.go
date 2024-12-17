@@ -7,6 +7,13 @@ type Point struct {
 	Y int
 }
 
+var Directions = []Point{
+	{1, 0},
+	{0, 1},
+	{-1, 0},
+	{0, -1},
+}
+
 func (p *Point) RotateCW() {
 	if p.X == 1 {
 		p.X = 0
