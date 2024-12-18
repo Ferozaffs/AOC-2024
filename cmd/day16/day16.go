@@ -55,24 +55,24 @@ func Solve(data string) (int, int) {
 		}
 	}
 
-	path, ans1 := Pathfind(start, end, &grid)
+	_, ans1 := Pathfind(start, end, &grid)
 
-	for x := range grid {
-		fmt.Print("\n")
-		for y := range grid[x] {
-			found := false
-			for _, p := range path {
-				if p.X == x && p.Y == y {
-					fmt.Print("O")
-					found = true
-					break
-				}
-			}
-			if !found {
-				fmt.Print(string(grid[x][y]))
-			}
-		}
-	}
+	//for x := range grid {
+	//	fmt.Print("\n")
+	//	for y := range grid[x] {
+	//		found := false
+	//		for _, p := range path {
+	//			if p.X == x && p.Y == y {
+	//				fmt.Print("O")
+	//				found = true
+	//				break
+	//			}
+	//		}
+	//		if !found {
+	//			fmt.Print(string(grid[x][y]))
+	//		}
+	//	}
+	//}
 
 	return ans1, 0
 }
