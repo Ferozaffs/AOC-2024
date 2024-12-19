@@ -4,6 +4,7 @@ import (
 	"aoc2024/cmd"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -30,6 +31,42 @@ func Run1() {
 }
 
 func Solve(data string) (int, int) {
+	lines := strings.Split(data, "\n")
 
-	return 0, 0
+	patterns := strings.Split(lines[0], ", ")
+
+	ans1 := 0
+	ans2 := 0
+	for i := 2; i < len(lines); i++ {
+		cache := make(map[string]int)
+		results := CheckPattern(lines[i], patterns, cache)
+		if results > 0 {
+			ans1++
+		}
+
+		ans2 += results
+	}
+
+	return ans1, ans2
+}
+
+func CheckPattern(s string, pattern []string, cache map[string]int) int {
+	if s == "" {
+		return 1
+	}
+
+	if res, ok := cache[s]; ok {
+		return res
+	}
+
+	res := 0
+	for _, p := range pattern {
+		if strings.HasPrefix(s, p) {
+			ns := s[len(p):]
+			res += CheckPattern(ns, pattern, cache)
+		}
+	}
+
+	cache[s] = res
+	return res
 }
