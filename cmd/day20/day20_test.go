@@ -4,10 +4,29 @@ import (
 	"testing"
 )
 
-func TestSample1(t *testing.T) {
+func TestSample(t *testing.T) {
+	sampleData := `###############
+#...#...#.....#
+#.#.#.#.#.###.#
+#S#...#.#.#...#
+#######.#.#.###
+#######.#.#...#
+#######.#.###.#
+###..E#...#...#
+###.#######.###
+#...###...#...#
+#.#####.#.###.#
+#.#...#.#.#...#
+#.#.#.#.#.#.###
+#...#...#...###
+###############`
 
-}
-
-func TestSample2(t *testing.T) {
-
+	SetCutoff(60)
+	ans1, _ := Solve(sampleData)
+	if ans1 != 1 {
+		t.Fatalf("Mismatch! Expected 2 got %d", ans1)
+	}
+	//if ans2 != "6,1" {
+	//	t.Fatalf("Mismatch! Expected 6,1 got %s", ans2)
+	//}
 }
